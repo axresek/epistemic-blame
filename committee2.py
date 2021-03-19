@@ -57,10 +57,11 @@ for coalition in all_coalitions:
         total_prob = 0
         for vs in filter(lambda vs: len(vs) >= votes_needed, power_set(voters)):
             prob = 1
-            for v in vs:
-                prob = prob * pr_yes[v]
-            for v in filter(lambda v: v not in vs, voters):
-                prob = prob * (1 - pr_yes[v])
+            for v in voters:
+                pr_v = pr_yes[v]
+                if v not in vs:
+                    pr_v = 1 - pr_v
+                prob = prob * pr_v
             total_prob += prob
         print("Probability of yes vote: {}".format(total_prob))
 
