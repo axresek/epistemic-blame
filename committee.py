@@ -31,6 +31,9 @@ ag5 = { 'pr': 40, 'marginal_pr': 5, 'marginal_cost': 100, 'join_cost': 2000 }
 # same as ag1 but she voted yes 
 ag6 = { 'pr': 60, 'marginal_pr': 5, 'marginal_cost': 100, 'join_cost': 0 }
 
+# ag7 votes yes
+# ag7 = 'join_cost': 0
+
 agents = {'ag1' : ag1,
           'ag2' : ag2,
           'ag3' : ag3,
@@ -99,15 +102,33 @@ class EpistemicState(object):
         return self.ag.join_cost) + coalition_cost
 
 
-# e1 and e2 are two epistemic s
+# e1 and e2 are two epistemic states
 ag1_in1 = EpistemicState(ag1, 1, True)
-ag1_in2 = EpistemicState(ag1, 2, True)tag1_in3 = EpistemicState(ag1, 3, True)
+ag1_in2 = EpistemicState(ag1, 2, True)
+ag1_in3 = EpistemicState(ag1, 3, True)
 ag1_in4 = EpistemicState(ag1, 4, True)
 ag1_in5 = EpistemicState(ag1, 5, True)
 ag1_in6 = EpistemicState(ag1, 6, True)
 ag1_in7 = EpistemicState(ag1, 7, True)
-ates
+
+
+"""
+ag1
+60% agents vote yes
+            E1                              E2
+max(0, 60 ((bill passed)k1)  ) - (40 ((bill not passed)k2)  )
+
+k1:
+{ag1 = yes, ag2 = yes, ag3 = yes, ag4 = yes, ag5 = yes , ag6 = yes, ag7 = yes}
+{ag1 = no, ag2 = yes, ag3 = yes, ag4 = yes, ag5 = yes , ag6 = yes, ag7 = yes}
+
+k2:
+{ag1 = no, ag2 = no, ag3 = no, ag4 = no, ag5 = no , ag6 = yes, ag7 = yes}
+
+"""
+
 def delta_epistemic(e1, e2, outcome):
+    outcome
     if e1 > e2:
         max = e1 - e2
     else:
