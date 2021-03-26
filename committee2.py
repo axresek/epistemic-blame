@@ -65,8 +65,6 @@ for coalition in all_coalitions:
                 prob = prob * pr_v
             total_prob += prob
         print("Probability of yes vote: {}".format(total_prob))
-
-        # TODO think about blame in the event of a no vote
         print("Probability of no vote: {}".format(1-total_prob))
    
     group_blame = 0
