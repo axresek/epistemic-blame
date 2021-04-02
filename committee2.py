@@ -66,21 +66,34 @@ for coalition in all_coalitions:
                 # using epistemic state (pov) of each agent to apply to all agents
                 pr_yes[ag] = pr(agent_base_pr[pov] + len(coalition) * agent_factor[pov])
             print(pr_yes)
-
+""" PROBABILITY OF A YES VOTE """
             total_prob = 0
             # power sets of those not in coalition
             # filter possibilities eg. 1,2,3,4,5 --> [1,2,3,4] [1,3,4,5] [1,2,3,5]
-            for yes in filter(lambda vs: len(vs) >= votes_needed, power_set(voters)):
+        #     for yes in filter(lambda vs: len(vs) >= votes_needed, power_set(voters)):
+        #         prob = 1
+        #         for v in voters: # v = ag
+        #             pr_v = pr_yes[v]
+        #             # if ag votes no
+        #             if v not in yes:
+        #                 pr_v = 1 - pr_v
+        #             prob = prob * pr_v
+        #         total_prob += prob
+        #     c_epis[pov] = total_prob
+        #     print("Probability of yes vote: {}".format(total_prob)) # e1
+        # print("LOOK HERE",c_epis)
+""" PROBABILITY OF A NO VOTE """
+            for no in filter(lambda vs: len(vs) < votes_needed, power_set(voters)):
                 prob = 1
                 for v in voters: # v = ag
                     pr_v = pr_yes[v]
-                    # if ag votes no
-                    if v not in yes:
+                    # if ag votes yes
+                    if v not in no:
                         pr_v = 1 - pr_v
                     prob = prob * pr_v
                 total_prob += prob
             c_epis[pov] = total_prob
-            print("Probability of yes vote: {}".format(total_prob)) # e1
+            print("Probability of no vote: {}".format(total_prob))
         print("LOOK HERE",c_epis)
     
     # group_blame = 0
@@ -110,5 +123,3 @@ for coalition in all_coalitions:
         #         prob = prob * pr_v
         #     total_prob += prob
         # print("Probability of yes vote: {}".format(total_prob))
-
-        # why is it not printing 6 even though it's in the yes coalition and it's counting it among the votes
