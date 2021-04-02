@@ -41,7 +41,7 @@ for coalition in all_coalitions:
         if ag not in [6,7]:
             num_sure_yesvotes += 1
     
-    print("{} has {} sure yes votes".format(coalition, num_sure_yesvotes))
+    # print("{} has {} sure yes votes".format(coalition, num_sure_yesvotes))
 
     pr_yes = 0
     if num_sure_yesvotes >= 4:
@@ -65,9 +65,16 @@ for coalition in all_coalitions:
                 # use each agents beliefs to set probabilities
                 # using epistemic state (pov) of each agent to apply to all agents
                 pr_yes[ag] = pr(agent_base_pr[pov] + len(coalition) * agent_factor[pov])
-            print(pr_yes)
-""" PROBABILITY OF A YES VOTE """
+            print("probabilities for yes: ", pr_yes)
+            
+            pr_no = dict()
+            for key, val in pr_yes.items():
+                val = 1 - val
+                pr_no[key] = val
+            print("probabilities for no: ", pr_no)
+
             total_prob = 0
+            """ PROBABILITY OF YES """
             # power sets of those not in coalition
             # filter possibilities eg. 1,2,3,4,5 --> [1,2,3,4] [1,3,4,5] [1,2,3,5]
         #     for yes in filter(lambda vs: len(vs) >= votes_needed, power_set(voters)):
@@ -82,11 +89,12 @@ for coalition in all_coalitions:
         #     c_epis[pov] = total_prob
         #     print("Probability of yes vote: {}".format(total_prob)) # e1
         # print("LOOK HERE",c_epis)
-""" PROBABILITY OF A NO VOTE """
-            for no in filter(lambda vs: len(vs) < votes_needed, power_set(voters)):
+            """ PROBABILITY OF A NO VOTE """
+            for no in filter(lambda vs: len(vs) < votes_needed, power_set(voters)): # i don't think it's computing right
+                print(no)
                 prob = 1
                 for v in voters: # v = ag
-                    pr_v = pr_yes[v]
+                    pr_v = pr_no[v]
                     # if ag votes yes
                     if v not in no:
                         pr_v = 1 - pr_v
