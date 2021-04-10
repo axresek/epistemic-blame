@@ -32,8 +32,12 @@ def power_set(s):
 all_coalitions = power_set(all_agents)
 epis = dict()
 
+cost = dict()
+
 for coalition in all_coalitions:
     epis[str(coalition)] = dict()
+    # epistemic states for everyone in the coalition
+    # c = coalition
     c_epis = epis[str(coalition)]
     num_sure_yesvotes = 2 # 6 and 7
 
@@ -47,7 +51,7 @@ for coalition in all_coalitions:
     if num_sure_yesvotes >= 4:
         pr_yes = 1
         for agent in all_agents:
-            c_epis[agent] = 1
+            c_epis[agent] = 1 # probability of voting yes
     else:  
         votes_needed = 4 - num_sure_yesvotes
         # now, compute probability we get votes_needed out of ag1 through 5
@@ -65,13 +69,14 @@ for coalition in all_coalitions:
                 # use each agents beliefs to set probabilities
                 # using epistemic state (pov) of each agent to apply to all agents
                 pr_yes[ag] = pr(agent_base_pr[pov] + len(coalition) * agent_factor[pov])
-            print("probabilities for yes: ", pr_yes)
+            # print("probabilities for yes: ", pr_yes)
             
             pr_no = dict()
+            # key is ag, val is probability
             for key, val in pr_yes.items():
                 val = 1 - val
                 pr_no[key] = val
-            print("probabilities for no: ", pr_no)
+            # print("probabilities for no: ", pr_no)
 
             total_prob = 0
             """ PROBABILITY OF YES """
@@ -89,45 +94,59 @@ for coalition in all_coalitions:
         #     c_epis[pov] = total_prob
         #     print("Probability of yes vote: {}".format(total_prob)) # e1
         # print("LOOK HERE",c_epis)
-            """ PROBABILITY OF A NO VOTE """
-            for no in filter(lambda vs: len(vs) < votes_needed, power_set(voters)): # i don't think it's computing right
-                print(no)
+            """ PROBABILITY OF A NO VOTE 
+                using world where bill doesn't pass """
+            # voters are those not in the coalition or not 6 or 7 that could vote yes or no
+            for no in filter(lambda vs: len(vs) >= 4, power_set(voters)):
+                # print(no) # prints out agents not in coalition, when vote is no
                 prob = 1
                 for v in voters: # v = ag
                     pr_v = pr_no[v]
+
+                    # new info: for cost
+                    # save all the times ag is not in coalition
+
                     # if ag votes yes
                     if v not in no:
                         pr_v = 1 - pr_v
+                        
+                        # new info: for cost
+                        # save all the times ag is in the coalition
+                    
                     prob = prob * pr_v
                 total_prob += prob
-            c_epis[pov] = total_prob
-            print("Probability of no vote: {}".format(total_prob))
-        print("LOOK HERE",c_epis)
-    
-    # group_blame = 0
-    # if num_sure_yesvotes == 7:
-    #     group_blame = 0
-    #     print("Group blame is ", group_blame)
-    # else:
-        # {2: 0.75, 3: 0.69, 4: 0.75, 5: 0.55}
-        # 2: 0.25, 3: .
-        # number of agents in coalition. Not in coalition = 1/7. 
-        yes = num_sure_yesvotes / 7
-        no = (7 - num_sure_yesvotes) / 7
-        group_blame = no * pr_yes[v]
+            c_epis[pov] = total_prob #
+            # print("Agent {} Probability of no vote: {}".format(pov, total_prob))
+        print("LOOK HERE",c_epis) # map from agents to their beliefs that it'll be a no vote
 
-        # for ag in voters:
-        #     # use each agents beliefs to set probabilities
-        #     pr_yes[ag] = pr(agent_base_pr[ag] + len(coalition) * agent_factor[ag])
-        # print(pr_yes)
 
-        # total_prob = 0
-        # for vs in filter(lambda vs: len(vs) >= votes_needed, power_set(voters)):
-        #     prob = 1
-        #     for v in voters:
-        #         pr_v = pr_yes[v]
-        #         if v not in vs:
-        #             pr_v = 1 - pr_v
-        #         prob = prob * pr_v
-        #     total_prob += prob
-        # print("Probability of yes vote: {}".format(total_prob))
+
+# particular coalition and agent's perspective
+# where they're part of the coalition or they're not
+# ag1 in coalition or not in the coalition and then look at the outcome of bill not passing
+# E2 is every other possible world from that agent's perspective
+# have to go through every possible coalition and look at what agent believes in that circumstance
+
+# cost function that can take a set of agents and tell you have expensive th
+
+""" COST """
+# N = 200
+# (N - Max (cost(ag, e2) - c(ag, e1))) / N # lower bound at 0
+
+# go through each powerset
+# save c_epis outputs for each agent
+
+# If there is more than one way for the agents in Ag to bring about E, 
+# we can think of c(Ag, E) as being the cost of the cheapest way to do so
+
+# calc group blame, for each agents epistemic state blame for group and blame for agent
+# pg. 5: db definition, for individual blame
+# pg. 4 definition of gb, generate group blame of whole group . 2nd gb is definied in terms of the first
+
+
+# define delta (epistemic state), tuple with 2 things in it agent number and coalition
+# map coalitions to probabilities
+# epis, agent number, coaltion, agent number, and coalition
+
+# define 4-arg gb (needs delta and cost)
+#
