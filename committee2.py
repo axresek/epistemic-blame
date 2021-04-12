@@ -22,6 +22,16 @@ agent_factor[5] = 0.05
 agent_factor[6] = 0.05
 agent_factor[7] = 0.05
 
+# if they were IN the coalition this is the cost to switch:
+agent_switch_cost = dict()
+agent_switch_cost[1] = 2000
+agent_switch_cost[2] = 500
+agent_switch_cost[3] = 2000
+agent_switch_cost[4] = 2000
+agent_switch_cost[5] = 2000
+agent_switch_cost[6] = 0
+agent_switch_cost[7] = 0
+
 def power_set(s):
     p = [[]]
     for x in s:
@@ -32,7 +42,7 @@ def power_set(s):
 all_coalitions = power_set(all_agents)
 epis = dict()
 
-cost = dict()
+cost_dict = dict()
 
 for coalition in all_coalitions:
     epis[str(coalition)] = dict()
@@ -120,7 +130,6 @@ for coalition in all_coalitions:
         print("LOOK HERE",c_epis) # map from agents to their beliefs that it'll be a no vote
 
 
-
 # particular coalition and agent's perspective
 # where they're part of the coalition or they're not
 # ag1 in coalition or not in the coalition and then look at the outcome of bill not passing
@@ -147,6 +156,21 @@ for coalition in all_coalitions:
 # define delta (epistemic state), tuple with 2 things in it agent number and coalition
 # map coalitions to probabilities
 # epis, agent number, coaltion, agent number, and coalition
+# 2 epistemic states (ie 2 agents' beliefs on coalitions), given outcome is a no vote
+def delta(epis, ag1, col1, ag2, col2):
+   return max(0, epis[col1][ag1] - epis[col2][ag2])
+
+# cost
+# cost of bringing about epistemic state (ie coalitions), also cost of yes vote for agents
+N = 200 # balance parameter
+def cost(ag, e):
+    
+
+def cost_balanced(ag1, e1, ag2, e2):
+    return (N - max(cost(ag1, e1) - cost(ag2, e2), 0)) / N
 
 # define 4-arg gb (needs delta and cost)
-#
+# calculates group blameworthiness of group ag with epistemic state e1 relative to epistemic state e2
+def four_arg_gb(delta, cost_balanced):
+    return delta * cost_balanced
+
