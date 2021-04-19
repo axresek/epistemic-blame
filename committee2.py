@@ -71,8 +71,13 @@ for coalition in all_coalitions:
     for ag in coalition:
         if ag not in [6,7]:
             num_sure_yesvotes += 1
+            c_cost[ag] = agent_indiv_switch_cost[ag]
     
+    # delta epistemic:
     # print("{} has {} sure yes votes".format(coalition, num_sure_yesvotes))
+
+    # cost:
+    # print(cost_dict)
 
     pr_yes = 0
     if num_sure_yesvotes >= 4:
@@ -105,7 +110,11 @@ for coalition in all_coalitions:
                 pr_no[key] = val
             # print("probabilities for no: ", pr_no)
 
+            # COST
+            c_cost[ag] += agent_switch_cost[pov]
+
             total_prob = 0
+            total_cost = 0
             """ PROBABILITY OF YES """
             # power sets of those not in coalition
             # filter possibilities eg. 1,2,3,4,5 --> [1,2,3,4] [1,3,4,5] [1,2,3,5]
@@ -142,9 +151,12 @@ for coalition in all_coalitions:
                     
                     prob = prob * pr_v
                 total_prob += prob
-            c_epis[pov] = total_prob #
+            c_epis[pov] = total_prob
+
+            c_cost[pov] += total_cost 
+
             # print("Agent {} Probability of no vote: {}".format(pov, total_prob))
-        print("LOOK HERE",c_epis) # map from agents to their beliefs that it'll be a no vote
+        print("c_epis:",c_epis) # map from agents to their beliefs that it'll be a no vote
 
 
 # particular coalition and agent's perspective
