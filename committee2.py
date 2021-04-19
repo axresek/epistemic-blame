@@ -23,14 +23,25 @@ agent_factor[6] = 0.05
 agent_factor[7] = 0.05
 
 # if they were IN the coalition this is the cost to switch:
+agent_indiv_switch_cost = dict()
+agent_indiv_switch_cost[1] = 2000
+agent_indiv_switch_cost[2] = 500
+agent_indiv_switch_cost[3] = 2000
+agent_indiv_switch_cost[4] = 2000
+agent_indiv_switch_cost[5] = 2000
+agent_indiv_switch_cost[6] = 0
+agent_indiv_switch_cost[7] = 0
+
+#For any coalition of n agents, belief that for a cost of n × switch_cost 
+# each agent’s probability of voting yes (including that of agents not in the coalition) raisedby agent_base_pr
 agent_switch_cost = dict()
-agent_switch_cost[1] = 2000
-agent_switch_cost[2] = 500
-agent_switch_cost[3] = 2000
-agent_switch_cost[4] = 2000
-agent_switch_cost[5] = 2000
-agent_switch_cost[6] = 0
-agent_switch_cost[7] = 0
+agent_switch_cost[1] = 100
+agent_switch_cost[2] = 100
+agent_switch_cost[3] = 100
+agent_switch_cost[4] = 150
+agent_switch_cost[5] = 100
+agent_switch_cost[6] = 100
+agent_switch_cost[7] = 100
 
 def power_set(s):
     p = [[]]
@@ -42,6 +53,7 @@ def power_set(s):
 all_coalitions = power_set(all_agents)
 epis = dict()
 
+# to keep track of cost of given coalition to agent's beliefs
 cost_dict = dict()
 
 for coalition in all_coalitions:
@@ -49,6 +61,11 @@ for coalition in all_coalitions:
     # epistemic states for everyone in the coalition
     # c = coalition
     c_epis = epis[str(coalition)]
+    
+    # coalition cost
+    cost_dict[str(coalition)] = dict()
+    c_cost = epis[str(coalition)]
+
     num_sure_yesvotes = 2 # 6 and 7
 
     for ag in coalition:
@@ -162,9 +179,16 @@ def delta(epis, ag1, col1, ag2, col2):
 
 # cost
 # cost of bringing about epistemic state (ie coalitions), also cost of yes vote for agents
+# ag is a subset of agents ie list of agents
 N = 200 # balance parameter
 def cost(ag, e):
-    
+    epis
+
+    # eg. using ag1 epistemic state for cost
+    # cost of 100 for all agents ag subset of agents
+    # if agent 1 is in the coalition add 2000 to get them to vote yes
+    # ep1: agent 1 not in coalition so just add cost of 100 to all agents
+    # ep2: agent 1 in coaltion (so cost 100 and then add another cost of 2000)
 
 def cost_balanced(ag1, e1, ag2, e2):
     return (N - max(cost(ag1, e1) - cost(ag2, e2), 0)) / N
