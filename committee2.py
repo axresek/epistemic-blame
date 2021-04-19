@@ -69,15 +69,18 @@ for coalition in all_coalitions:
     num_sure_yesvotes = 2 # 6 and 7
 
     for ag in coalition:
+        # cost
+        # indiv switch cost to yes + num of agents in coalition * switch cost
+        c_cost[ag] = agent_indiv_switch_cost[ag] + ( len(coalition) * agent_switch_cost[ag] )
+        # delta epistemic:
         if ag not in [6,7]:
             num_sure_yesvotes += 1
-            c_cost[ag] = agent_indiv_switch_cost[ag]
     
     # delta epistemic:
     # print("{} has {} sure yes votes".format(coalition, num_sure_yesvotes))
 
     # cost:
-    # print(cost_dict)
+    print(c_cost)
 
     pr_yes = 0
     if num_sure_yesvotes >= 4:
@@ -111,7 +114,7 @@ for coalition in all_coalitions:
             # print("probabilities for no: ", pr_no)
 
             # COST
-            c_cost[ag] += agent_switch_cost[pov]
+            # c_cost[ag] += agent_switch_cost[pov]
 
             total_prob = 0
             total_cost = 0
