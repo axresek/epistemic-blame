@@ -199,8 +199,12 @@ def delta(epis, ag1, col1, ag2, col2):
 # cost of bringing about epistemic state (ie coalitions), also cost of yes vote for agents
 # ag is a subset of agents ie list of agents
 N = 200 # balance parameter
-def cost(ag, e):
-    epis
+def cost(ag, col, e):
+    total_cost = 0
+    if ag in col:
+        total_cost += agent_indiv_switch_cost[ag]
+    total_cost += len(col) * agent_switch_cost[ag]
+    return total_cost
 
     # eg. using ag1 epistemic state for cost
     # cost of 100 for all agents ag subset of agents
