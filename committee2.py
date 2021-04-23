@@ -58,13 +58,13 @@ cost_dict = dict()
 
 for coalition in all_coalitions:
     epis[str(coalition)] = dict()
-    # epistemic states for everyone in the coalition
-    # c = coalition
+    # probabilities for this coalition
     c_epis = epis[str(coalition)]
     
     # coalition cost
     cost_dict[str(coalition)] = dict()
-    c_cost = epis[str(coalition)]
+    # costs for this coalition
+    c_cost = cost_dict[str(coalition)]
 
     num_sure_yesvotes = 2 # 6 and 7
 
