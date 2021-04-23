@@ -58,13 +58,13 @@ cost_dict = dict()
 
 for coalition in all_coalitions:
     epis[str(coalition)] = dict()
-    # epistemic states for everyone in the coalition
-    # c = coalition
+    # probabilities for this coalition
     c_epis = epis[str(coalition)]
     
     # coalition cost
     cost_dict[str(coalition)] = dict()
-    c_cost = epis[str(coalition)]
+    # costs for this coalition
+    c_cost = cost_dict[str(coalition)]
 
     num_sure_yesvotes = 2 # 6 and 7
 
@@ -91,6 +91,9 @@ for coalition in all_coalitions:
         votes_needed = 4 - num_sure_yesvotes
         # now, compute probability we get votes_needed out of ag1 through 5
         # voters = those not in coalition
+        
+        # MMG 2021-04-23: this is wrong! being in the coalition doesn't guarantee a yes vote, just increases probability
+        # we can abandon num_sure_yesvotes entirely...
         voters = list(filter(lambda ag: ag not in coalition and ag not in [6,7], all_agents))
 
         # map from coalition to a {map from agents to probabilities}
@@ -196,8 +199,12 @@ def delta(epis, ag1, col1, ag2, col2):
 # cost of bringing about epistemic state (ie coalitions), also cost of yes vote for agents
 # ag is a subset of agents ie list of agents
 N = 200 # balance parameter
-def cost(ag, e):
-    epis
+def cost(ag, col, e):
+    total_cost = 0
+    if ag in col:
+        total_cost += agent_indiv_switch_cost[ag]
+    total_cost += len(col) * agent_switch_cost[ag]
+    return total_cost
 
     # eg. using ag1 epistemic state for cost
     # cost of 100 for all agents ag subset of agents
@@ -212,4 +219,3 @@ def cost_balanced(ag1, e1, ag2, e2):
 # calculates group blameworthiness of group ag with epistemic state e1 relative to epistemic state e2
 def four_arg_gb(delta, cost_balanced):
     return delta * cost_balanced
-
