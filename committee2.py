@@ -91,6 +91,9 @@ for coalition in all_coalitions:
         votes_needed = 4 - num_sure_yesvotes
         # now, compute probability we get votes_needed out of ag1 through 5
         # voters = those not in coalition
+        
+        # MMG 2021-04-23: this is wrong! being in the coalition doesn't guarantee a yes vote, just increases probability
+        # we can abandon num_sure_yesvotes entirely...
         voters = list(filter(lambda ag: ag not in coalition and ag not in [6,7], all_agents))
 
         # map from coalition to a {map from agents to probabilities}
